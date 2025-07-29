@@ -43,14 +43,23 @@ flutter:
     platforms:
       android:
         ffiPlugin: true
+        pluginClass: FlutterAge
       ios:
         ffiPlugin: true
+        pluginClass: FlutterAge
       linux:
         ffiPlugin: true
+        pluginClass: FlutterAge
       macos:
         ffiPlugin: true
+        pluginClass: FlutterAge
       windows:
         ffiPlugin: true
+        pluginClass: FlutterAge
+      web:
+        ffiPlugin: true
+        pluginClass: FlutterAge
+        fileName: flutter_age.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

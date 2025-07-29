@@ -12,5 +12,15 @@ age = "0.11.1"
 serde = { version = "1.0", features = ["derive"] }
 base64 = "0.21"
 
+[profile.release]
+opt-level = 1
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
+
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
