@@ -1,7 +1,7 @@
 name: flutter_age
 description: "A new Flutter FFI plugin project."
 version: 0.0.1
-homepage:
+homepage: https://github.com/atomic-blend/flutter_age
 
 environment:
   sdk: ^3.8.1
