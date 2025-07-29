@@ -33,8 +33,8 @@ flutter pub get
 import 'package:flutter_age/flutter_age.dart';
 
 void main() async {
-  // Initialize the Rust library
-  await RustLib.init();
+  // Initialize the FlutterAge library
+  await FlutterAge.init();
   runApp(MyApp());
 }
 ```

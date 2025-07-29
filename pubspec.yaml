@@ -1,6 +1,6 @@
 name: flutter_age
 description: "A Flutter plugin for the age encryption tool"
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/atomic-blend/flutter_age
 
 environment:

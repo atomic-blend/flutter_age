@@ -1,14 +1,12 @@
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_age/flutter_age.dart';
-import 'package:flutter_age/src/rust/api/types.dart';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  setUpAll(() async => await RustLib.init());
+  setUpAll(() async => await FlutterAge.init());
   
   test('Can create key', () async {
     final key = createKey();
