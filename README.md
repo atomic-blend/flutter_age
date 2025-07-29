@@ -1,92 +1,106 @@
 # flutter_age
 
-A new Flutter FFI plugin project.
+A Flutter plugin that provides age encryption functionality using Rust and Flutter Rust Bridge.
+
+## Features
+
+- Generate age encryption keys (public/private key pairs)
+- Encrypt strings and binary data using age encryption
+- Decrypt strings and binary data using age encryption
+- Cross-platform support (Android, iOS, macOS, Linux, Windows, Web)
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[FFI plugin](https://flutter.dev/to/ffi-package),
-a specialized package that includes native code directly invoked with Dart FFI.
+### Installation
 
-## Project structure
-
-This template uses the following structure:
-
-* `src`: Contains the native source code, and a CmakeFile.txt file for building
-  that source code into a dynamic library.
-
-* `lib`: Contains the Dart code that defines the API of the plugin, and which
-  calls into the native code using `dart:ffi`.
-
-* platform folders (`android`, `ios`, `windows`, etc.): Contains the build files
-  for building and bundling the native code library with the platform application.
-
-## Building and bundling native code
-
-The `pubspec.yaml` specifies FFI plugins as follows:
+Add `flutter_age` to your `pubspec.yaml`:
 
 ```yaml
-  plugin:
-    platforms:
-      some_platform:
-        ffiPlugin: true
+dependencies:
+  flutter_age: ^0.0.1
 ```
 
-This configuration invokes the native build for the various target platforms
-and bundles the binaries in Flutter applications using these FFI plugins.
+### Platform Configuration
 
-This can be combined with dartPluginClass, such as when FFI is used for the
-implementation of one platform in a federated plugin:
+#### Automatic Configuration (All platforms except Web)
 
-```yaml
-  plugin:
-    implements: some_other_plugin
-    platforms:
-      some_platform:
-        dartPluginClass: SomeClass
-        ffiPlugin: true
+For Android, iOS, macOS, Linux, and Windows, the configuration is handled automatically by the plugin. No additional setup is required.
+
+#### Web Configuration
+
+For web support, you need to manually generate the Rust WebAssembly files since Flutter doesn't include the package's web directory when building your app.
+
+1. Clone the `flutter_age` package locally
+2. Run the following command to generate the Rust WASM files in your app's web directory:
+
+```bash
+flutter_rust_bridge_codegen build-web --release -o ~/workspace/atomic-blend/app
 ```
 
-A plugin can have both FFI and method channels:
+Replace `~/workspace/atomic-blend/app` with the path to your app's web directory.
 
-```yaml
-  plugin:
-    platforms:
-      some_platform:
-        pluginClass: SomeName
-        ffiPlugin: true
+### Usage
+
+```dart
+import 'package:flutter_age/flutter_age.dart';
+
+// Initialize the plugin
+await FlutterAge.init();
+
+// Generate a new key pair
+AgeKey key = createKey();
+
+// Encrypt a string
+String encrypted = encryptString("Hello, World!", key.publicKey);
+
+// Decrypt a string
+String decrypted = decryptString(encrypted, key.privateKey);
+
+// Encrypt binary data
+List<int> data = [1, 2, 3, 4, 5];
+String encryptedData = encryptData(data, key.publicKey);
+
+// Decrypt binary data
+List<int> decryptedData = decryptData(encryptedData, key.privateKey);
 ```
 
-The native build systems that are invoked by FFI (and method channel) plugins are:
+## API Reference
 
-* For Android: Gradle, which invokes the Android NDK for native builds.
-  * See the documentation in android/build.gradle.
-* For iOS and MacOS: Xcode, via CocoaPods.
-  * See the documentation in ios/flutter_age.podspec.
-  * See the documentation in macos/flutter_age.podspec.
-* For Linux and Windows: CMake.
-  * See the documentation in linux/CMakeLists.txt.
-  * See the documentation in windows/CMakeLists.txt.
+### Functions
 
-## Binding to native code
+- `createKey()` - Generates a new age key pair
+- `encryptString(String message, String publicKey)` - Encrypts a string using a public key
+- `decryptString(String ciphertext, String privateKey)` - Decrypts a string using a private key
+- `encryptData(List<int> data, String publicKey)` - Encrypts binary data using a public key
+- `decryptData(String encryptedDataBase64, String privateKey)` - Decrypts binary data using a private key
 
-To use the native code, bindings in Dart are needed.
-To avoid writing these by hand, they are generated from the header file
-(`src/flutter_age.h`) by `package:ffigen`.
-Regenerate the bindings by running `dart run ffigen --config ffigen.yaml`.
+### Types
 
-## Invoking native code
+- `AgeKey` - Contains a public key and private key pair
 
-Very short-running native functions can be directly invoked from any isolate.
-For example, see `sum` in `lib/flutter_age.dart`.
+## Updating the Package
 
-Longer-running functions should be invoked on a helper isolate to avoid
-dropping frames in Flutter applications.
-For example, see `sumAsync` in `lib/flutter_age.dart`.
+When a new version of the package is available:
 
-## Flutter help
+1. Update the version in your `pubspec.yaml`
+2. Pull the version of the package corresponding to the new version in pubspec
+3. Regenerate the WASM files for your app using the web configuration command above
 
-For help getting started with Flutter, view our
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Project Structure
+
+This plugin uses Flutter Rust Bridge to connect Dart code with Rust implementations:
+
+- `lib/` - Contains the Dart API definitions and generated bindings
+- `rust/` - Contains the Rust implementation using the age encryption library
+- `web/` - Contains the generated WebAssembly files for web support
+
+## Dependencies
+
+- `flutter_rust_bridge: 2.11.1` - For Rust-Dart interop
+- `age` - Rust age encryption library
+- `base64` - For encoding/decoding encrypted data
+
+## License
+
+This project is licensed under the terms specified in the LICENSE file.
 
