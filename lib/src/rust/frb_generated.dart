@@ -13,15 +13,16 @@ import 'frb_generated.io.dart'
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 /// Main entrypoint of the Rust API
-class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
+class FlutterAge
+    extends BaseEntrypoint<FlutterAgeApi, FlutterAgeApiImpl, FlutterAgeWire> {
   @internal
-  static final instance = RustLib._();
+  static final instance = FlutterAge._();
 
-  RustLib._();
+  FlutterAge._();
 
   /// Initialize flutter_rust_bridge
   static Future<void> init({
-    RustLibApi? api,
+    FlutterAgeApi? api,
     BaseHandler? handler,
     ExternalLibrary? externalLibrary,
     bool forceSameCodegenVersion = true,
@@ -36,7 +37,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   /// Initialize flutter_rust_bridge in mock mode.
   /// No libraries for FFI are loaded.
-  static void initMock({required RustLibApi api}) {
+  static void initMock({required FlutterAgeApi api}) {
     instance.initMockImpl(api: api);
   }
 
@@ -47,12 +48,12 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   static void dispose() => instance.disposeImpl();
 
   @override
-  ApiImplConstructor<RustLibApiImpl, RustLibWire> get apiImplConstructor =>
-      RustLibApiImpl.new;
+  ApiImplConstructor<FlutterAgeApiImpl, FlutterAgeWire>
+  get apiImplConstructor => FlutterAgeApiImpl.new;
 
   @override
-  WireConstructor<RustLibWire> get wireConstructor =>
-      RustLibWire.fromExternalLibrary;
+  WireConstructor<FlutterAgeWire> get wireConstructor =>
+      FlutterAgeWire.fromExternalLibrary;
 
   @override
   Future<void> executeRustInitializers() async {
@@ -77,7 +78,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
       );
 }
 
-abstract class RustLibApi extends BaseApi {
+abstract class FlutterAgeApi extends BaseApi {
   AgeKey crateApiFunctionsCreateKey();
 
   Uint8List crateApiFunctionsDecryptData({
@@ -103,8 +104,9 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiFunctionsInitApp();
 }
 
-class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
-  RustLibApiImpl({
+class FlutterAgeApiImpl extends FlutterAgeApiImplPlatform
+    implements FlutterAgeApi {
+  FlutterAgeApiImpl({
     required super.handler,
     required super.wire,
     required super.generalizedFrbRustBinding,

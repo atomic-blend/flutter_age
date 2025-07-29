@@ -7,10 +7,10 @@ import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'types.dart';
 
-AgeKey createKey() => RustLib.instance.api.crateApiFunctionsCreateKey();
+AgeKey createKey() => FlutterAge.instance.api.crateApiFunctionsCreateKey();
 
 String encryptString({required String message, required String publicKey}) =>
-    RustLib.instance.api.crateApiFunctionsEncryptString(
+    FlutterAge.instance.api.crateApiFunctionsEncryptString(
       message: message,
       publicKey: publicKey,
     );
@@ -18,13 +18,13 @@ String encryptString({required String message, required String publicKey}) =>
 String decryptString({
   required String ciphertext,
   required String privateKey,
-}) => RustLib.instance.api.crateApiFunctionsDecryptString(
+}) => FlutterAge.instance.api.crateApiFunctionsDecryptString(
   ciphertext: ciphertext,
   privateKey: privateKey,
 );
 
 String encryptData({required List<int> data, required String publicKey}) =>
-    RustLib.instance.api.crateApiFunctionsEncryptData(
+    FlutterAge.instance.api.crateApiFunctionsEncryptData(
       data: data,
       publicKey: publicKey,
     );
@@ -32,7 +32,7 @@ String encryptData({required List<int> data, required String publicKey}) =>
 Uint8List decryptData({
   required String encryptedDataBase64,
   required String privateKey,
-}) => RustLib.instance.api.crateApiFunctionsDecryptData(
+}) => FlutterAge.instance.api.crateApiFunctionsDecryptData(
   encryptedDataBase64: encryptedDataBase64,
   privateKey: privateKey,
 );
