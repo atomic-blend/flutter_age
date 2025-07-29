@@ -45,10 +45,10 @@ void main() async {
 import 'package:flutter_age/flutter_age.dart';
 
 // Generate a new age key pair
-Map<String, String> keyPair = createKey();
+AgeKey keyPair = createKey();
 
-print('Public key: ${keyPair['public_key']}');
-print('Private key: ${keyPair['private_key']}');
+print('Public key: ${keyPair.publicKey}');
+print('Private key: ${keyPair.privateKey}');
 ```
 
 ### Example output
@@ -60,21 +60,29 @@ Private key: AGE-SECRET-KEY-1EG6UVJTHMJ44Q4HTXS3M2PKQ65SQ7RJXXGSXA9Q0A0HGYRZ6V9H
 
 ## API Reference
 
+### Data Types
+
+#### `AgeKey`
+
+A struct containing age encryption keys.
+
+**Fields:**
+- `publicKey` (String): The public key for encryption
+- `privateKey` (String): The private key for decryption
+
 ### Functions
 
 #### `createKey()`
 
 Generates a new age encryption key pair.
 
-**Returns:** `Map<String, String>` - A map containing:
-- `public_key`: The public key for encryption
-- `private_key`: The private key for decryption
+**Returns:** `AgeKey` - A struct containing the public and private keys
 
 **Example:**
 ```dart
-Map<String, String> keys = createKey();
-String publicKey = keys['public_key']!;
-String privateKey = keys['private_key']!;
+AgeKey keys = createKey();
+String publicKey = keys.publicKey;
+String privateKey = keys.privateKey;
 ```
 
 ## Platform Support

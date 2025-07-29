@@ -5,8 +5,23 @@
 
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'types.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
-AgeKey createKey() => RustLib.instance.api.crateApiFunctionsCreateKey();
+class AgeKey {
+  final String publicKey;
+  final String privateKey;
+
+  const AgeKey({required this.publicKey, required this.privateKey});
+
+  @override
+  int get hashCode => publicKey.hashCode ^ privateKey.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AgeKey &&
+          runtimeType == other.runtimeType &&
+          publicKey == other.publicKey &&
+          privateKey == other.privateKey;
+}
