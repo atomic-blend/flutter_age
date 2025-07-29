@@ -8,3 +8,17 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'types.dart';
 
 AgeKey createKey() => RustLib.instance.api.crateApiFunctionsCreateKey();
+
+String encryptString({required String message, required String publicKey}) =>
+    RustLib.instance.api.crateApiFunctionsEncryptString(
+      message: message,
+      publicKey: publicKey,
+    );
+
+String decryptString({
+  required String ciphertext,
+  required String privateKey,
+}) => RustLib.instance.api.crateApiFunctionsDecryptString(
+  ciphertext: ciphertext,
+  privateKey: privateKey,
+);

@@ -449,6 +449,7 @@ name = "flutter_age"
 version = "0.1.0"
 dependencies = [
  "age",
+ "base64",
  "flutter_rust_bridge",
  "serde",
 ]

@@ -67,7 +67,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -61396089;
+  int get rustContentHash => 604805477;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -79,6 +79,16 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
 abstract class RustLibApi extends BaseApi {
   AgeKey crateApiFunctionsCreateKey();
+
+  String crateApiFunctionsDecryptString({
+    required String ciphertext,
+    required String privateKey,
+  });
+
+  String crateApiFunctionsEncryptString({
+    required String message,
+    required String publicKey,
+  });
 
   Future<void> crateApiFunctionsInitApp();
 }
@@ -114,6 +124,66 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "create_key", argNames: []);
 
   @override
+  String crateApiFunctionsDecryptString({
+    required String ciphertext,
+    required String privateKey,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(ciphertext, serializer);
+          sse_encode_String(privateKey, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiFunctionsDecryptStringConstMeta,
+        argValues: [ciphertext, privateKey],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFunctionsDecryptStringConstMeta =>
+      const TaskConstMeta(
+        debugName: "decrypt_string",
+        argNames: ["ciphertext", "privateKey"],
+      );
+
+  @override
+  String crateApiFunctionsEncryptString({
+    required String message,
+    required String publicKey,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(message, serializer);
+          sse_encode_String(publicKey, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiFunctionsEncryptStringConstMeta,
+        argValues: [message, publicKey],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFunctionsEncryptStringConstMeta =>
+      const TaskConstMeta(
+        debugName: "encrypt_string",
+        argNames: ["message", "publicKey"],
+      );
+
+  @override
   Future<void> crateApiFunctionsInitApp() {
     return handler.executeNormal(
       NormalTask(
@@ -122,7 +192,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 2,
+            funcId: 4,
             port: port_,
           );
         },
