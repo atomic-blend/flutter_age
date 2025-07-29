@@ -22,3 +22,17 @@ String decryptString({
   ciphertext: ciphertext,
   privateKey: privateKey,
 );
+
+String encryptData({required List<int> data, required String publicKey}) =>
+    RustLib.instance.api.crateApiFunctionsEncryptData(
+      data: data,
+      publicKey: publicKey,
+    );
+
+Uint8List decryptData({
+  required String encryptedDataBase64,
+  required String privateKey,
+}) => RustLib.instance.api.crateApiFunctionsDecryptData(
+  encryptedDataBase64: encryptedDataBase64,
+  privateKey: privateKey,
+);
