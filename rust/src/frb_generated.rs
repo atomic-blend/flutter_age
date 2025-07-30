@@ -132,11 +132,9 @@ fn wire__crate__api__functions__decrypt_string_impl(
             let api_ciphertext = <String>::sse_decode(&mut deserializer);
             let api_private_key = <String>::sse_decode(&mut deserializer);
             deserializer.end();
-            transform_result_sse::<_, ()>((move || {
-                let output_ok = Result::<_, ()>::Ok(crate::api::functions::decrypt_string(
-                    api_ciphertext,
-                    api_private_key,
-                ))?;
+            transform_result_sse::<_, String>((move || {
+                let output_ok =
+                    crate::api::functions::decrypt_string(api_ciphertext, api_private_key)?;
                 Ok(output_ok)
             })())
         },

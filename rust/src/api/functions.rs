@@ -28,14 +28,27 @@ pub fn encrypt_string(message: String, public_key: String) -> String {
 }
 
 #[flutter_rust_bridge::frb(sync)]
-pub fn decrypt_string(ciphertext: String, private_key: String) -> String {
-    let identity = age::x25519::Identity::from_str(&private_key).unwrap();
-    let encrypted = base64::engine::general_purpose::STANDARD.decode(ciphertext).unwrap();
-    let decryptor = age::Decryptor::new(&encrypted[..]).unwrap();
+pub fn decrypt_string(ciphertext: String, private_key: String) -> Result<String, String> {
+    let identity = age::x25519::Identity::from_str(&private_key)
+        .map_err(|e| format!("Invalid private key: {e}"))?;
+    
+    // Clean the input string - remove any whitespace or newlines
+    let cleaned_ciphertext = ciphertext.trim().replace('\n', "").replace('\r', "");
+    
+    // Decode base64 with better error handling
+    let encrypted = base64::engine::general_purpose::STANDARD.decode(&cleaned_ciphertext)
+        .map_err(|e| format!("Failed to decode base64: {e}. Input length: {}", cleaned_ciphertext.len()))?;
+    
+    let decryptor = age::Decryptor::new(&encrypted[..])
+        .map_err(|e| format!("Failed to create decryptor: {e}"))?;
     let mut decrypted = Vec::new();
-    let mut reader = decryptor.decrypt([&identity as &dyn age::Identity].into_iter()).unwrap();
-    reader.read_to_end(&mut decrypted).unwrap();
-    String::from_utf8(decrypted).unwrap()
+    let mut reader = decryptor.decrypt([&identity as &dyn age::Identity].into_iter())
+        .map_err(|e| format!("Failed to decrypt: {e}"))?;
+    reader.read_to_end(&mut decrypted)
+        .map_err(|e| format!("Failed to read decrypted data: {e}"))?;
+    
+    String::from_utf8(decrypted)
+        .map_err(|e| format!("Failed to convert to UTF-8: {e}"))
 }
 
 #[flutter_rust_bridge::frb(sync)]
@@ -64,9 +77,12 @@ pub fn decrypt_data(encrypted_data_base64: String, private_key: String) -> Resul
     let identity = age::x25519::Identity::from_str(&private_key)
         .map_err(|e| format!("Invalid private key: {e}"))?;
     
-    // Decode base64 encrypted data
-    let encrypted_data = base64::engine::general_purpose::STANDARD.decode(encrypted_data_base64)
-        .map_err(|e| format!("Failed to decode base64: {e}"))?;
+    // Clean the input string - remove any whitespace or newlines
+    let cleaned_data = encrypted_data_base64.trim().replace('\n', "").replace('\r', "");
+    
+    // Decode base64 with better error handling
+    let encrypted_data = base64::engine::general_purpose::STANDARD.decode(&cleaned_data)
+        .map_err(|e| format!("Failed to decode base64: {e}. Input length: {}", cleaned_data.len()))?;
 
     // Use age::Decryptor for data decryption
     let decryptor = age::Decryptor::new(&encrypted_data[..])

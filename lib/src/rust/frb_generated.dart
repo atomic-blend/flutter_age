@@ -180,7 +180,7 @@ class FlutterAgeApiImpl extends FlutterAgeApiImplPlatform
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_String,
-          decodeErrorData: null,
+          decodeErrorData: sse_decode_String,
         ),
         constMeta: kCrateApiFunctionsDecryptStringConstMeta,
         argValues: [ciphertext, privateKey],
